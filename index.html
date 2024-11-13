@@ -9,8 +9,22 @@
 </head>
 <body>
     <div class="content">
-        <canvas class="canvas" id="canvas"></canvas>
-        <p class="score">Puntos: <strong class="points" id="points">0</strong></p>
+        
+        <div class="game">
+            <div class="game__info info">
+                <p class="info__score">Puntos: <strong class="info__points" id="points">0</strong></p>
+
+                <div class="info__element element">
+                    <div class="element__text">next</div>
+                    <div class="element__img" id="nextElement"></div>
+                </div>
+            </div>
+
+            <div class="game__screen screen">
+                <canvas class="canvas" id="canvas"></canvas>
+            </div>
+        </div>
+        
     </div>
     <script src="script.js"></script>
 </body>

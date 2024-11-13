@@ -244,19 +244,25 @@ class Game{
         this.count2 = 0;
         this.vSpeed = 2;
         this.shapeColor;
+
+        
+        this.nextShape = this.randomValue();
         this.start();
     }
 
     start(){
         this.obj = [];
         this.shape = this.shapeNumber;
-        this.arrOfShape = this.randomShape();
+        this.arrOfShape = this.newShape(this.nextShape);
 
         for(let i = 0; i < this.arrOfShape[this.shapeNumber].length; i++){
             for(let j = 0; j < this.arrOfShape[this.shapeNumber][0].length; j++){
                 this.obj.push(new Pj(this, j, i, this.arrOfShape[this.shapeNumber][i][j]));
             }
         }
+
+        this.nextShape = this.randomValue();
+        this.showNextShape(this.nextShape);
     }
     
     changeShape(){
@@ -272,8 +278,12 @@ class Game{
         }
     }
 
-    randomShape(){
+    randomValue(){
         let value = Math.floor(Math.random() * 7) + 1;
+        return value;
+    }
+
+    newShape(value){
 
         switch(value){
             case 1: 
@@ -298,6 +308,7 @@ class Game{
                 this.shapeColor = '#0202c4';
                 return this.arrOfShape7;
         }
+
     }
 
     objCollition(deltaTime){
@@ -440,6 +451,10 @@ class Game{
                 }
             }
         }
+    }
+
+    showNextShape(value){
+        document.getElementById('nextElement').innerHTML = `<img src="/img/element-${value}.png">`;
     }
 
     render(ctx, deltaTime){
