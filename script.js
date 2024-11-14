@@ -26,7 +26,6 @@ class Game{
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
 
-
         this.gridWidth = this.arrOfgame[0].length;
         this.gridHeight = this.arrOfgame.length;
         this.cellWidth = this.width / this.gridWidth;
@@ -60,12 +59,6 @@ class Game{
         ];
         this.arrOfShape2 = [
             [
-                [2, 2, 2, 2],
-                [2, 2, 2, 2],
-                [2, 2, 2, 2],
-                [1, 1, 1, 1]
-            ],
-            [
                 [1, 2, 2, 2],
                 [1, 2, 2, 2],
                 [1, 2, 2, 2],
@@ -82,6 +75,12 @@ class Game{
                 [1, 2, 2, 2],
                 [1, 2, 2, 2],
                 [1, 2, 2, 2]
+            ],
+            [
+                [2, 2, 2, 2],
+                [2, 2, 2, 2],
+                [2, 2, 2, 2],
+                [1, 1, 1, 1]
             ]
         ];
         this.arrOfShape3 = [
@@ -206,6 +205,14 @@ class Game{
         this.score = document.getElementById('points');
         this.points = 0;
 
+        this.glassView = document.getElementById('glassView');
+        this.startGameBt = document.getElementById('startGameBt');
+
+        this.startGameBt.addEventListener('click',_=>{
+            this.initialGame();
+            this.glassView.style.display = 'none';
+        });
+
         window.addEventListener('keydown', (e)=>{
             
             if((e.key) === 'a'){
@@ -244,8 +251,32 @@ class Game{
         this.count2 = 0;
         this.vSpeed = 2;
         this.shapeColor;
+    }
 
-        
+    initialGame(){
+        this.arrOfgame = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ];
+        this.points = 0;
         this.nextShape = this.randomValue();
         this.start();
     }
@@ -257,7 +288,7 @@ class Game{
 
         for(let i = 0; i < this.arrOfShape[this.shapeNumber].length; i++){
             for(let j = 0; j < this.arrOfShape[this.shapeNumber][0].length; j++){
-                this.obj.push(new Pj(this, j, i, this.arrOfShape[this.shapeNumber][i][j]));
+                this.obj.push(new Pj(this, j + 4, i, this.arrOfShape[this.shapeNumber][i][j]));
             }
         }
 
@@ -351,7 +382,6 @@ class Game{
 
         // vertical collition
         if(this.count2 > 960 / this.vSpeed){
-
             for(let i = this.obj.length -1; i >= 0; i--){
                 
                 if(this.obj[i].type === 1){
@@ -371,7 +401,7 @@ class Game{
 
                 this.vCollition = false;
                 this.shapeNumber = 0;
-                this.start();
+                this.start();  
             }else{
 
                 for(let i = 0; i < this.obj.length; i++){
@@ -457,16 +487,32 @@ class Game{
         document.getElementById('nextElement').innerHTML = `<img src="/img/element-${value}.png">`;
     }
 
+    endGame(){
+        for(let i = 0; i < this.gridWidth; i++){
+                if(this.arrOfgame[1][i] === 1){
+                    return 1;
+                }
+        }
+    }
     render(ctx, deltaTime){
 
         this.drawGrid(ctx);
         this.drawElements(ctx);
-        this.eraseRow();
-        for(let i = this.obj.length -1; i >= 0; i--){
-            this.obj[i].draw(ctx);
+
+        // end game
+        if(this.endGame()){
+            this.glassView.style.display = 'flex';
+            document.getElementById('startGameText').innerHTML = `
+                You'r points <strong class="start-game__points" id="gameEndPoints">${this.points}</strong>
+            `;
+        }else{
+            this.eraseRow();
+            for(let i = this.obj.length -1; i >= 0; i--){
+                this.obj[i].draw(ctx);
+            }
+            this.objCollition(deltaTime);
         }
-            
-        this.objCollition(deltaTime);
+
         this.score.innerHTML = this.points;
     }
 }
@@ -539,6 +585,5 @@ window.addEventListener('load',_=>{
         }
 
         loop();
-        
     }
 });
