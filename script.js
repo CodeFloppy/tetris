@@ -484,7 +484,7 @@ class Game{
     }
 
     showNextShape(value){
-        document.getElementById('nextElement').innerHTML = `<img src="/img/element-${value}.png">`;
+        document.getElementById('nextElement').innerHTML = `<img src="img/element-${value}.png">`;
     }
 
     endGame(){
